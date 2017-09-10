@@ -22,6 +22,13 @@ tableタグの中身をJSON形式で取得できたりします。
 $Lattice = new Lattice('#element');
 ```
 
+ちなみに、行数・列数を反映させるには、`initialize`メソッドを使わないといけません。
+
+```
+$Lattice = new Lattice('#element', 5, 3);
+$Lattice.initialize();
+```
+
 
 ## 行を追加する
 `addRow()`メソッドを使います。
