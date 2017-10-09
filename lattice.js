@@ -48,11 +48,11 @@ var Lattice = (function() {
      * 行の追加
      */
     Lattice.prototype.addRow = function(){
-        $(this.panel_name).append('<tr>' +  + '</tr>');
+        // 最終行を属性ごとまるっとコピー
+        let clone = $(this.panel_name + ' tr:last').clone(true);
 
-        for( var i = 0; i < $(this.panel_name + ' tr:first td').length; i++) {
-            $(this.panel_name + ' tr:last').append('<td>' + (i + 1) + '</td>');
-        }
+        // まるっと追加
+        $(this.panel_name).append(clone);
     }
 
 
@@ -111,18 +111,33 @@ var Lattice = (function() {
                 // セルのテキストを取得
                 let cell_text = cells.eq(j).text();
 
-                // セルの状態（クラス）を取得
-                let cell_stat = cells.eq(j).attr('class');
-                if ( cell_stat === undefined ){
-                    cell_stat = '';
+                // セルの属性をすべて取得
+                let attrs = $(cells.eq(j)).get(0).attributes;
+                let attrtext = '';
+                let attrJson = {};
+
+                for (var k = 0; k < attrs.length; k++) {
+                    attrtext += '{"'+ attrs[k]['name'] +'": "'+ attrs[k]['value'] +'"},';
                 }
+
+                // 最後のカンマを削除
+                attrtext = attrtext.slice(0, -1);
+
+                // 配列化
+                attrtext = '['+ attrtext +']';
+
+                if ( attrtext !== '' ){
+                    attrJson = JSON.parse(attrtext);
+                }
+
+
 
                 // 追加用のJSON作成
                 let map = {
                     "row_num": i+'',                   // 行番号
                     "col_num": j+'',                   // 列番号
-                    "cell_text": cell_text,         // セルのテキスト
-                    "cell_stat":cell_stat           // セルのクラス
+                    "cell_text": cell_text,            // セルのテキスト
+                    "attributes": attrJson             // セルのクラス
                 }
 
                 // データを保存
@@ -130,6 +145,7 @@ var Lattice = (function() {
             }
 
         }
+
 
         // JSONデータを返す
         return json;
