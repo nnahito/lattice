@@ -1,5 +1,8 @@
 
-
+/**
+ * HTMLのテーブルを簡単に増減でき、内容をJSONで取得できるJSのモデル
+ * @author Nな人
+ */
 var Lattice = (function() {
 
     /**
@@ -7,13 +10,15 @@ var Lattice = (function() {
      * 初期設定をここで渡す。
      *
      * @param       {string}     element      テーブル要素のid名
-     * @param       {Number} [rows=1]
-     * @param       {Number} [cols=1]     [description]
+     * @param       {string}     html=''      セル内に表示するHTML
+     * @param       {Number}     rows=1       行数
+     * @param       {Number}     cols=1       列数
      * @constructor
      */
-    function Lattice(element, rows=1, cols=1) {
+    function Lattice(element, html='', rows=1, cols=1) {
         // プロパティに要素名を保存しておく
         this.panel_name = element;          // 要素の名前
+        this.html = html;                   // セル内に表示するHTML
         this.rows = rows;                   // 行数
         this.cols = cols;                   // 列数
     }
@@ -30,7 +35,7 @@ var Lattice = (function() {
 
             for (var j = 0; j < this.cols; j++) {
                 // セルを足していく
-                element += '<td>あ</td>';
+                element += '<td>' + this.html + '</td>';
             }
 
             // 行の終わり
@@ -61,8 +66,10 @@ var Lattice = (function() {
      */
     Lattice.prototype.addCol = function(){
         var cell = $(this.panel_name + ' tr:first td').length;
+        var html = this.html;
+
         $(this.panel_name + ' tr').each(function(i) {
-            $(this).append('<td>' + (i + 1) + '</td>');
+            $(this).append('<td>' + html + '</td>');
         });
     }
 
