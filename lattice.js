@@ -2,6 +2,7 @@
 /**
  * HTMLのテーブルを簡単に増減でき、内容をJSONで取得できるJSのモデル
  * @author Nな人
+ * @see https://github.com/nnahito/lattice
  */
 var Lattice = (function() {
 
